@@ -84,6 +84,10 @@ const server = createServer(async (req, res) => {
       s.saved.add(String(body.slug ?? ''));
       return json(res, 201, { count: s.saved.size });
     }
+    if (method === 'POST' && path === '/api/compare') {
+      const body = await readJson(req);
+      return json(res, 201, { slug: String(body.slug ?? '') });
+    }
     if (method === 'POST' && path === '/api/orders') {
       const body = await readJson(req);
       if (!s.cart.length) return json(res, 400, { error: 'Your cart is empty' });

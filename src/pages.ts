@@ -78,7 +78,8 @@ export function productPage(p: Product, ctx: PageCtx): string {
     <input id="qty" name="qty" type="number" min="1" value="1" placeholder="Qty">
   </div>
   <div class="actions">
-    <button class="btn btn-primary" data-testid="add-to-cart" data-action="cart">Add to cart</button>
+    <button class="btn btn-primary" data-testid="add-to-compare" data-action="compare">Add to compare</button>
+    <button class="btn btn-primary" data-testid="add-to-cart-btn" data-action="cart">Add to cart</button>
     <button class="btn" data-action="saved">Save for later</button>
     <button class="btn" data-action="wishlist">Add to wishlist</button>
   </div>
@@ -100,6 +101,9 @@ document.querySelectorAll('[data-action]').forEach((btn) => btn.addEventListener
     const res = await post('/api/wishlist', { slug });
     document.querySelector('[data-testid="wish-badge"]').textContent = res.count;
     msg.textContent = 'Added to wishlist';
+  } else if (action === 'compare') {
+    await post('/api/compare', { slug });
+    msg.textContent = 'Added to compare';
   } else {
     await post('/api/saved', { slug });
     msg.textContent = 'Saved for later';
