@@ -68,8 +68,9 @@ export function lineTotal(line: CartLine): number {
   return (findProduct(line.slug)?.price ?? 0) * line.qty;
 }
 
+/** Totals come from the catalogue so a stale cart line can never undercharge. */
 export function cartTotal(sid: string): number {
-  return session(sid).cart.reduce((n, l) => n + lineTotal(l), 0);
+  return session(sid).cart.reduce((n, l) => n + (findProduct(l.slug)?.price ?? 0), 0);
 }
 
 export function placeOrder(sid: string): number {
