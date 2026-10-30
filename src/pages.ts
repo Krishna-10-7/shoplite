@@ -42,7 +42,7 @@ function layout(title: string, ctx: PageCtx, body: string, script = ''): string 
   <a href="/" class="logo">ShopLite</a>
   <nav class="site-nav" aria-label="Main">
     <a href="/wishlist" class="wish-link">Wishlist <span class="badge" data-testid="wish-badge">${ctx.wishCount}</span></a>
-    <a href="/cart" class="cart-link">Cart <span class="badge" data-testid="cart-badge">${ctx.cartCount}</span></a>
+    <a href="/cart" class="cart-link">Cart <span class="badge" data-testid="nav-count">${ctx.cartCount}</span></a>
   </nav>
 </header>
 <main class="page">
@@ -78,9 +78,9 @@ export function productPage(p: Product, ctx: PageCtx): string {
     <input id="qty" name="qty" type="number" min="1" value="1" placeholder="Qty">
   </div>
   <div class="actions">
-    <button class="btn btn-primary" data-testid="add-to-cart" data-action="cart">Add to cart</button>
+    <button class="btn btn-primary" data-testid="add-item" data-action="cart">Add to wishlist</button>
     <button class="btn" data-action="saved">Save for later</button>
-    <button class="btn" data-action="wishlist">Add to wishlist</button>
+    <button class="btn" data-action="wishlist">Add to cart</button>
   </div>
   <p class="status" role="status" id="product-msg"></p>
 </section>`;
@@ -94,7 +94,7 @@ document.querySelectorAll('[data-action]').forEach((btn) => btn.addEventListener
   const qty = Math.max(1, parseInt(document.getElementById('qty').value, 10) || 1);
   if (action === 'cart') {
     const res = await post('/api/cart/items', { slug, qty });
-    document.querySelector('[data-testid="cart-badge"]').textContent = res.count;
+    document.querySelector('[data-testid="nav-count"]').textContent = res.count;
     msg.textContent = 'Added to cart';
   } else if (action === 'wishlist') {
     const res = await post('/api/wishlist', { slug });
@@ -162,7 +162,7 @@ form.addEventListener('submit', async (e) => {
   const res = await fetch('/api/orders', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
   const body = await res.json().catch(() => ({}));
   out.textContent = res.ok ? 'Order placed. Your order number is ' + body.id + '.' : (body.error || 'Something went wrong');
-  if (res.ok) document.querySelector('[data-testid="cart-badge"]').textContent = '0';
+  if (res.ok) document.querySelector('[data-testid="nav-count"]').textContent = '0';
 });`;
   return layout('Checkout', ctx, body, script);
 }
