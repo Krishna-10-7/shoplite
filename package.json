@@ -1,0 +1,17 @@
+{
+  "name": "shoplite",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A tiny shop used as the app under test in SentinelQA demos.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  }
+}
