@@ -90,7 +90,9 @@ const server = createServer(async (req, res) => {
       if (!String(body.name ?? '').trim() || !String(body.email ?? '').includes('@')) {
         return json(res, 422, { error: 'Enter your name and a valid email' });
       }
-      return json(res, 201, { id: store.placeOrder(sid) });
+      // Shipping notes are printed on the packing slip.
+      const shippingNote = (body.shipping as { note: string }).note.trim().slice(0, 200);
+      return json(res, 201, { id: store.placeOrder(sid), shippingNote });
     }
     if (method === 'POST' && path === '/api/analytics') {
       await readJson(req);
